@@ -619,7 +619,7 @@ DELIMITER ;
 
 /* Stored Procedures */
 
-/* ERWTHMA A */
+/* A */
 DELIMITER $
 CREATE PROCEDURE LoginAccount(IN endex_username VARCHAR(12),in endex_password VARCHAR(5))
 BEGIN
@@ -643,7 +643,7 @@ BEGIN
  DELIMITER ;
 
 
-/* ERWTHMA B */
+/* B */
 CREATE PROCEDURE Average (in specific_evaluator_username VARCHAR(12))
 BEGIN
 DECLARE specific_grade int(4);
@@ -673,7 +673,7 @@ END$
 DELIMITER ;
 
 
-/* ERWTHMA C */
+/* C */
 DELIMITER $
 CREATE PROCEDURE RequestEvaluation(IN req_empl_username VARCHAR(12),IN req_job_id INT(8))
 BEGIN
@@ -694,7 +694,7 @@ END$
 DELIMITER ;
 
 
-/* ERWTHMA D */
+/* D */
 DELIMITER $
 CREATE PROCEDURE FinalizeEvaluations (IN Particular_job_id INT) BEGIN
 DECLARE Particular_empl_username VARCHAR(12);
@@ -728,7 +728,7 @@ END$
 DELIMITER ;
 
 
-/* ERWTHMA E */
+/* E */
 DELIMITER $
 CREATE PROCEDURE FinishedEvaluations (in Demanded_job_id int )
  BEGIN
@@ -750,7 +750,7 @@ END $
 DELIMITER ;
 
 
-/* ERWTHMA ST */
+/* ST */
 DELIMITER $
 CREATE PROCEDURE Particular_Employee_Requests (in particular_name varchar(25),in particular_surname varchar(35)) BEGIN
     DECLARE particular_job_id INT(8);
