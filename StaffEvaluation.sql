@@ -5,11 +5,11 @@ CREATE DATABASE staffevaluation;
 USE staffevaluation;
 
 CREATE TABLE user(
-    username VANCHAR(12) NOT NULL,
-    password VANCHAR(5) NOT NULL,
-    name VANCHAR(25),
-    surname VANCHAR(35),
-    email VANCHAR(30),
+    username VARCHAR(12) NOT NULL,
+    password VARCHAR(5) NOT NULL,
+    name VARCHAR(25),
+    surname VARCHAR(35),
+    email VARCHAR(30),
     reg_date DATE DEFAULT CURDATE(),                               /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */
     userkind ENUM('MANAGER','EVALUTOR','EMPLOYEE','ADMINISTRATOR'),
     PRIMARY KEY (username)
