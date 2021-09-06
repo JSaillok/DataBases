@@ -1,4 +1,4 @@
-DROP DATABASE staffevaluation;
+DROP DATABASE IF EXISTS staffevaluation;
 
 CREATE DATABASE staffevaluation;
 
@@ -15,23 +15,38 @@ CREATE TABLE user(
     PRIMARY KEY (username)
 );
 
+CREATE TABLE company(
+    AFM CHAR(9) NOT NULL,
+    DOY VARCHAR(15),
+    compname VARCHAR(35),
+    phone BIGINT(16),
+
+    country VARCHAR(15),
+    street VARCHAR(15),
+    num TINYINT(4),
+    city VARCHAR (15),
+
+    /*base VARCHAR(45) GENERATED ALWAYS AS (CONCAT(country,street,num,city)),*/
+    PRIMARY KEY(AFM)
+);
+
 CREATE TABLE manager(
     manager_username VARCHAR(12) NOT NULL,
     exp_years TINYINT(4),
     AFM CHAR(9) NOT NULL,
     PRIMARY KEY (manager_username),
     CONSTRAINT const1
-    FOREIGN KEY (manager_username) 
+    FOREIGN KEY(manager_username) 
     REFERENCES user(username)
     ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT const2
-    FOREIGN KEY (AFM)
+    FOREIGN KEY(AFM)
     REFERENCES company(AFM)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE evaluator(
-    evaluator_username VANCHAR(12) NOT NULL,
+    evaluator_username VARCHAR(12) NOT NULL,
     AFM CHAR(9) NOT NULL,
     exp_years TINYINT(4) NOT NULL,
     average_grade FLOAT(4,1),
@@ -47,73 +62,29 @@ CREATE TABLE evaluator(
 );
 
 CREATE TABLE employee(
-    empl_username VANCHAR(12) NOT NULL,
+    empl_username VARCHAR(12) NOT NULL,
     AFM CHAR(9) NOT NULL,
     bio TEXT,
     sistatikes VARCHAR(35),
     certificates VARCHAR(35),
     awards VARCHAR(35),
     PRIMARY KEY(empl_username),
-    CONSTRAINT const
-    FOREIGN KEY(AFM)
-    REFERENCES comany(AFM)
-    ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT const5
+    FOREIGN KEY(AFM)
+    REFERENCES company(AFM)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const6
     FOREIGN KEY(empl_username)
     REFERENCES user(username)
     ON DELETE CASCADE ON UPDATE CASCADE    
 );
 
-CREATE TABLE company(
-    AFM CHAR(9) NOT NULL,
-    DOY VARCHAR(15),
-    compname VARCHAR(35),
-    phone BIGINT(16),
-
-    country VARCHAR9(15),
-    street VARCHAR(15),
-    num TINYINT(4),
-    city VARCHAR (15),
-
-    base VARCHAR(45) GENERATED ALWAYS AS (CONCAT(country,street,num,city)),
-    PRIMARY KEY(AFM)
-);
-
-CREATE TABLE needs(
-    job_id INT(4) NOT NULL,
-    antikeim_title VARCHAR(36),
-    PRIMARY KEY(job_id,antikeim_title),
-    CONSTRAINT const7
-    FOREIGN KEY(antikeim_title)
-    REFERENCES antikeim(title)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const8
-    FOREIGN KEY(job_id)
-    REFERENCES job(id)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE antikeim(
-    title VARCHAR(36) NOT NULL,
-    descr TINYTEXT,
-    belongs_to VARCHAR(36) NOT NULL
-    PRIMARY KEY(title),
-    CONSTRAINT const6
-    FOREIGN KEY(belongs_to)
-    REFERENCES antikeim(title)
-    ON DELETE CASCADE ON UPDATE CASCADE
-    
-);
-
-CREATE TABLE project(
-    empl_username VARCHAR(12) NOT NULL,
-    num TINYINT(4) NOT NULL AUTO_INCREMENT,
-    descr TEXT,
-    url VARCHAR(60),
-    PRIMARY KEY(empl_username),
-    UNIQUE (url)
-    CONSTRAINT const9
-    FOREIGN KEY(empl_username)
+CREATE TABLE languages(
+    employee VARCHAR(12) NOT NULL,
+    lang set('EN','FR','SP','GR'),
+    PRIMARY KEY(employee,lang),
+    CONSTRAINT const17
+    FOREIGN KEY(employee)
     REFERENCES employee(empl_username)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -121,54 +92,117 @@ CREATE TABLE project(
 CREATE TABLE job(
     job_id INT(4) NOT NULL AUTO_INCREMENT,
     AFM CHAR(9) NOT NULL,
-    evaluator_username VARCHAR(12),
-    salary FLOAT(6,1)
+    evaluator_username VARCHAR(12) NOT NULL,
+    salary FLOAT(6,1),
     position VARCHAR(40),
-    base CHAR(45),
-    announce_date DATETIME,
-    SubmissionDate DATE,
+/*  base VARCHAR(45),  */
+    country VARCHAR(15),
+    street VARCHAR(15),
+    num TINYINT(4),
+    city VARCHAR (15),
+    announce_date DATETIME DEFAULT NOW(),
+    SubmissionDate DATE NOT NULL,
     PRIMARY KEY(job_id,AFM),
-    CONSTRAINT const10
-    FOREIGN KEY(evaluator)
-    REFERENCES evaluator(evaluator_username)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const
+    INDEX SUB(SubmissionDate),
+    CONSTRAINT const7
     FOREIGN KEY(AFM)
     REFERENCES company(AFM)
     ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const
-    FOREIGN KEY(base)
-    REFERENCES company(base)
+    CONSTRAINT const8
+    FOREIGN KEY(evaluator_username)
+    REFERENCES evaluator(evaluator_username)
     ON DELETE CASCADE ON UPDATE CASCADE
+/*  CONSTRAINT const9
+    FOREIGN KEY(base)    
+    REFERENCES company(base)    
+    ON DELETE CASCADE ON UPDATE CASCADE 
+    CONSTRAINT const9
+    FOREIGN KEY(country)
+    REFERENCES company(country)
+    ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT const27
+    FOREIGN KEY (street)
+    REFERENCES company(street)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const28
+    FOREIGN KEY (num)
+    REFERENCES company(num)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const29
+    FOREIGN KEY (city)
+    REFERENCES company(city)
+    ON DELETE CASCADE ON UPDATE CASCADE */
+);
+
+CREATE TABLE antikeim(
+    title VARCHAR(36) NOT NULL,
+    descr TINYTEXT,
+    belongs_to VARCHAR(36) NOT NULL,
+    PRIMARY KEY(title),
+    CONSTRAINT const10
+    FOREIGN KEY(belongs_to)
+    REFERENCES antikeim(title)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE needs(
+    job_id INT(4) NOT NULL,
+    antikeim_title VARCHAR(36),
+    PRIMARY KEY(job_id,antikeim_title),
+    CONSTRAINT const11
+    FOREIGN KEY(antikeim_title)
+    REFERENCES antikeim(title)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const12
+    FOREIGN KEY(job_id)
+    REFERENCES job(job_id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE project(
+    num TINYINT(4) AUTO_INCREMENT NOT NULL,
+    empl_username VARCHAR(12) NOT NULL,
+    descr TEXT,
+    url VARCHAR(60),
+    PRIMARY KEY(num,empl_username),
+    UNIQUE (url),
+    CONSTRAINT const13
+    FOREIGN KEY(empl_username)
+    REFERENCES employee(empl_username)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE availablejob(
+    empl_username VARCHAR(15) NOT NULL,
+    job_id INT(4) NOT NULL,
+    PRIMARY KEY(empl_username,job_id), 
+    CONSTRAINT const23
+    FOREIGN KEY(empl_username)
+    REFERENCES employee(empl_username)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT const24
+    FOREIGN KEY(job_id)
+    REFERENCES job(job_id)
+    ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE requestevaluation(
     empl_username VARCHAR(12) NOT NULL,
     job_id INT(4) NOT NULL,
     SubmissionDate DATE NOT NULL,
-    empl_interest BOOL DEFAULT FALSE
+    empl_interest BOOL DEFAULT FALSE,
     PRIMARY KEY(empl_username,job_id),
-    CONSTRAINT const11
+    CONSTRAINT const14
     FOREIGN KEY(empl_username)
     REFERENCES availablejob(empl_username)
     ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const12
+    CONSTRAINT const15
     FOREIGN KEY(job_id)
     REFERENCES job(job_id)
     ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const
+    CONSTRAINT const16
     FOREIGN KEY(SubmissionDate)
     REFERENCES job(SubmissionDate)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE languages(
-    employee VANCHAR(12) NOT NULL,
-    lang set('EN','FR','SP','GR'),
-    PRIMARY KEY(employee,lang),
-    CONSTRAINT const13
-    FOREIGN KEY(employee)
-    REFERENCES employee(empl_username)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -181,24 +215,24 @@ CREATE TABLE degree(
 );
 
 CREATE TABLE has_degree(
+    empl_username VARCHAR(12) NOT NULL,
     degr_title VARCHAR(50) NOT NULL,
     degr_idryma VARCHAR(40) NOT NULL,
-    empl_username VARCHAR(12) NOT NULL,
     etos YEAR(4),
     grade FLOAT(3,1),
     PRIMARY KEY(degr_title,degr_idryma,empl_username),
-    CONSTRAINT const14
-    FOREIGN KEY(degr_title)
-    REFERENCES degree(titlos)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const15
-    FOREIGN KEY(degr_idryma)
-    REFERENCES degree(idryma)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const16
+    CONSTRAINT const20
     FOREIGN KEY(empl_username)
     REFERENCES employee(empl_username)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const18
+    FOREIGN KEY(degr_title)
+    REFERENCES degree(titlos)
     ON DELETE CASCADE ON UPDATE CASCADE
+/*  CONSTRAINT const19
+    FOREIGN KEY(degr_idryma)
+    REFERENCES degree(idryma)
+    ON DELETE CASCADE ON UPDATE CASCADE*/
 );
 
 CREATE TABLE evaluationresult(
@@ -212,47 +246,33 @@ CREATE TABLE evaluationresult(
     grade INT(4),
     comments VARCHAR(255),
     PRIMARY KEY(Evld,empl_username),
-    CONSTRAINT const17
+    CONSTRAINT const21
     FOREIGN KEY(empl_username)
     REFERENCES requestevaluation(empl_username)
     ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const18
+    CONSTRAINT const22
     FOREIGN KEY(job_id)
     REFERENCES requestevaluation(job_id)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE availablejob(
-    empl_username VARCHAR(15) NOT NULL,
-    job_id INT(4) NOT NULL,
-    PRIMARY KEY(empl_username,job_id), 
-    CONSTRAINT const
-    FOREIGN KEY(empl_username)
-    REFERENCES employee(empl_username)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT const
-    FOREIGN KEY(job_id)
-    REFERENCES job(job_id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-);
-
 CREATE TABLE logs(
     order_of_action int(8) auto_increment not null,
+    username VARCHAR(12) NOT NULL,
     userkind ENUM('MANAGER','EVALUTOR','EMPLOYEE','ADMINISTRATOR') NOT NULL,
     table_of_incident ENUM('job','employee','evaluationresult') NOT NULL,
-    username VARCHAR(12) NOT NULL,
     time_of_incident DATETIME,
     type_of_incident ENUM('INSERT','UPDATE','DELETE') not null,
     success enum('YES','NO'),
-    PRIMARY KEY(username),
-    CONSTRAINT const
-    FOREIGN KEY(userkind)
-    REFERENCES user(userkind)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const
+    PRIMARY KEY(order_of_action,username),
+    CONSTRAINT const26    
     FOREIGN KEY(username)
     REFERENCES user(username)
     ON DELETE CASCADE ON UPDATE CASCADE
+/*    CONSTRAINT const25
+    FOREIGN KEY(userkind)
+    REFERENCES user(userkind)
+    ON DELETE CASCADE ON UPDATE CASCADE */
 );
 
 
@@ -619,7 +639,7 @@ DELIMITER ;
 
 /* Stored Procedures */
 
-/* A */
+/* ERWTHMA A */
 DELIMITER $
 CREATE PROCEDURE LoginAccount(IN endex_username VARCHAR(12),in endex_password VARCHAR(5))
 BEGIN
@@ -643,7 +663,7 @@ BEGIN
  DELIMITER ;
 
 
-/* B */
+/* ERWTHMA B */
 CREATE PROCEDURE Average (in specific_evaluator_username VARCHAR(12))
 BEGIN
 DECLARE specific_grade int(4);
@@ -673,7 +693,7 @@ END$
 DELIMITER ;
 
 
-/* C */
+/* ERWTHMA C */
 DELIMITER $
 CREATE PROCEDURE RequestEvaluation(IN req_empl_username VARCHAR(12),IN req_job_id INT(8))
 BEGIN
@@ -694,7 +714,7 @@ END$
 DELIMITER ;
 
 
-/* D */
+/* ERWTHMA D */
 DELIMITER $
 CREATE PROCEDURE FinalizeEvaluations (IN Particular_job_id INT) BEGIN
 DECLARE Particular_empl_username VARCHAR(12);
@@ -728,7 +748,7 @@ END$
 DELIMITER ;
 
 
-/* E */
+/* ERWTHMA E */
 DELIMITER $
 CREATE PROCEDURE FinishedEvaluations (in Demanded_job_id int )
  BEGIN
@@ -750,7 +770,7 @@ END $
 DELIMITER ;
 
 
-/* ST */
+/* ERWTHMA ST */
 DELIMITER $
 CREATE PROCEDURE Particular_Employee_Requests (in particular_name varchar(25),in particular_surname varchar(35)) BEGIN
     DECLARE particular_job_id INT(8);
