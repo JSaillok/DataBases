@@ -269,7 +269,7 @@ CREATE TABLE logs(
     FOREIGN KEY(username)
     REFERENCES user(username)
     ON DELETE CASCADE ON UPDATE CASCADE
-/*    CONSTRAINT const25
+/*  CONSTRAINT const25
     FOREIGN KEY(userkind)
     REFERENCES user(userkind)
     ON DELETE CASCADE ON UPDATE CASCADE */
@@ -371,20 +371,20 @@ CREATE TRIGGER UsernameChange
 BEFORE UPDATE ON user
 FOR EACH ROW
 BEGIN
-	IF ( current_userkind<>'ADMINISTRATOR') THEN
+	IF (current_userkind<>'ADMINISTRATOR') THEN
 		IF (OLD.username<>NEW.username OR OLD.userkind<>NEW.userkind OR OLD.reg_date<>NEW.reg_date OR OLD.name<>NEW.name OR OLD.surname<>NEW.surname) THEN
 			SELECT  'DEN EXEIS DIKAIWMATA NA ALLA3EIS AYTHN TIMH'; /* SIGNAL SQLSTATE VALUE '45000' SET message_text */
 		END IF;
     END IF;
 END$
 DELIMITER ;
-
+/* userkind den 3erei ti einai */
 
 CREATE TRIGGER InsertDate
 AFTER INSERT  ON user
 FOR EACH ROW
 SET reg_date=CURDATE();
-
+/* vgazei sfalma reg_date */
 
 /* ERWTHMA 4b */
 /* A VERSION */
@@ -395,6 +395,7 @@ CREATE TRIGGER UnchangeableColumns
  BEGIN
     IF (@Current_user_type<>'ADMINISTRATOR') THEN
         IF (NEW.AFM<>OLD.AFM) THEN
+         
          SET NEW.AFM=OLD.AFM;
         END IF;
         IF (NEW.DOY<>OLD.DOY) THEN
@@ -426,7 +427,7 @@ BEGIN
 		Set NEW.compname=OLD.compname;
      END IF;
 END$
-DELIMITER $
+DELIMITER ;
 
 /* ERWTHMA 4a */
 
