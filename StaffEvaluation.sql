@@ -26,7 +26,7 @@ CREATE TABLE company(
     num TINYINT(4),
     city VARCHAR (15),
 
-    /*base VARCHAR(45) GENERATED ALWAYS AS (CONCAT(country,street,num,city)),*/
+/*  edra VARCHAR(45) GENERATED ALWAYS AS (CONCAT(country,street,num,city)),*/
     PRIMARY KEY(AFM)
 );
 
@@ -95,11 +95,7 @@ CREATE TABLE job(
     evaluator_username VARCHAR(12) NOT NULL,
     salary FLOAT(6,1),
     position VARCHAR(40),
-/*  base VARCHAR(45),  */
-    country VARCHAR(15),
-    street VARCHAR(15),
-    num TINYINT(4),
-    city VARCHAR (15),
+    edra VARCHAR(45), 
     announce_date DATETIME DEFAULT NOW(),
     SubmissionDate DATE NOT NULL,
     PRIMARY KEY(job_id,AFM),
@@ -112,26 +108,6 @@ CREATE TABLE job(
     FOREIGN KEY(evaluator_username)
     REFERENCES evaluator(evaluator_username)
     ON DELETE CASCADE ON UPDATE CASCADE
-/*  CONSTRAINT const9
-    FOREIGN KEY(base)    
-    REFERENCES company(base)    
-    ON DELETE CASCADE ON UPDATE CASCADE 
-    CONSTRAINT const9
-    FOREIGN KEY(country)
-    REFERENCES company(country)
-    ON DELETE CASCADE ON UPDATE CASCADE
-    CONSTRAINT const27
-    FOREIGN KEY (street)
-    REFERENCES company(street)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const28
-    FOREIGN KEY (num)
-    REFERENCES company(num)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const29
-    FOREIGN KEY (city)
-    REFERENCES company(city)
-    ON DELETE CASCADE ON UPDATE CASCADE */
 );
 
 CREATE TABLE antikeim(
@@ -228,11 +204,11 @@ CREATE TABLE has_degree(
     CONSTRAINT const18
     FOREIGN KEY(degr_title)
     REFERENCES degree(titlos)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE,
 /*  CONSTRAINT const19
     FOREIGN KEY(degr_idryma)
     REFERENCES degree(idryma)
-    ON DELETE CASCADE ON UPDATE CASCADE*/
+    ON DELETE CASCADE ON UPDATE CASCADE */
 );
 
 CREATE TABLE evaluationresult(
@@ -272,7 +248,7 @@ CREATE TABLE logs(
 /*  CONSTRAINT const25
     FOREIGN KEY(userkind)
     REFERENCES user(userkind)
-    ON DELETE CASCADE ON UPDATE CASCADE */
+    ON DELETE CASCADE ON UPDATE CASCADE*/
 );
 
 
@@ -371,59 +347,39 @@ CREATE TRIGGER UsernameChange
 BEFORE UPDATE ON user
 FOR EACH ROW
 BEGIN
-	IF (current_userkind<>'ADMINISTRATOR') THEN
+	IF (@current_userkind<>'ADMINISTRATOR') THEN
 		IF (OLD.username<>NEW.username OR OLD.userkind<>NEW.userkind OR OLD.reg_date<>NEW.reg_date OR OLD.name<>NEW.name OR OLD.surname<>NEW.surname) THEN
-			SELECT  'DEN EXEIS DIKAIWMATA NA ALLA3EIS AYTHN TIMH'; /* SIGNAL SQLSTATE VALUE '45000' SET message_text */
+			SIGNAL SQLSTATE VALUE '45000' SET message_text = 'DEN EXEIS DIKAIWMATA NA ALLA3EIS AYTHN TIMH';
 		END IF;
     END IF;
 END$
 DELIMITER ;
 /* userkind den 3erei ti einai */
 
+/*
 CREATE TRIGGER InsertDate
 AFTER INSERT  ON user
 FOR EACH ROW
 SET reg_date=CURDATE();
-/* vgazei sfalma reg_date */
+vgazei sfalma reg_date 
+*/
 
 /* ERWTHMA 4b */
-/* A VERSION */
-DELIMITER $
-CREATE TRIGGER UnchangeableColumns
- BEFORE UPDATE ON company
- FOR EACH ROW
- BEGIN
-    IF (@Current_user_type<>'ADMINISTRATOR') THEN
-        IF (NEW.AFM<>OLD.AFM) THEN
-         
-         SET NEW.AFM=OLD.AFM;
-        END IF;
-        IF (NEW.DOY<>OLD.DOY) THEN
-         SET NEW.DOY=OLD.DOY;
-        END IF;
-        IF (NEW.compname <> Old.compname) THEN
-         SET New.compname=Old.compname;
-        END IF;
-    END IF;
-END$
-DELIMITER ;
-
-/* B VERSION */
 DELIMITER $
 CREATE TRIGGER UnchangeableColumns
 BEFORE UPDATE ON company
 FOR EACH ROW
 BEGIN
 	IF (NEW.AFM<>OLD.AFM) THEN
-		Select 'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
 		Set NEW.AFM=OLD.AFM;
     END IF;
     IF (NEW.DOY<>OLD.DOY) THEN
-		Select 'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
         Set NEW.AFM=OLD.AFM;
     END IF;
     IF (NEW.compname <> OLD.compname) THEN
-		Select 'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
 		Set NEW.compname=OLD.compname;
      END IF;
 END$
@@ -459,7 +415,7 @@ BEGIN
 END$
 DELIMITER ;
 
-/* INSERT UPDATE DELETE DEGREES */
+/* INSERT UPDATE DELETE DEGREES exw 8ema degr_idryma */
 
 DELIMITER $
 CREATE TRIGGER InsertDegree
@@ -539,7 +495,7 @@ CREATE TRIGGER SAUpdatedDate
 AFTER UPDATE ON job
 FOR EACH ROW
 BEGIN
-    DECLARE finishedflag bool;
+    DECLARE finished bool;
     DECLARE endex_requester VARCHAR(12);
     DECLARE SendCursor CURSOR FOR SELECT empl_username FROM employee WHERE AFM=NEW.AFM;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished=FALSE;
@@ -547,10 +503,10 @@ BEGIN
     IF (OLD.SubmissionDate<>NEW.SubmissionDate) THEN
         OPEN SendCursor;
         SET finished=TRUE;
-        FETCH Send_Cursor INTO endex_requester;
-        WHILE (finishedflag=TRUE) do
+        FETCH SendCursor INTO endex_requester;
+        WHILE (finished=TRUE) do
 	        UPDATE requestevaluation SET SubmissionDate=NEW.SubmissionDate
-            SWHERE requestevaluation.empl_username=endex_requester AND requestevaluation.job_id=NEW.job_id;
+            WHERE requestevaluation.empl_username=endex_requester AND requestevaluation.job_id=NEW.job_id;
 
             FETCH SendCursor INTO endex_requester;
         END WHILE;
@@ -586,12 +542,12 @@ DELIMITER ;
 /* APARAITHTES DHLWSEIS GIA EVALUATION RESULT */
 DELIMITER $
 CREATE TRIGGER UnchangeableGrade
-BEFORE UPDATE evaluationresult
+BEFORE UPDATE ON evaluationresult
 FOR EACH ROW
 BEGIN
     IF (OLD.grade <> NEW.grade AND OLD.grade IS NOT NULL AND @current_userkind<>'ADMINISTRATOR') THEN
         CALL FailureLog('evaluationresult','UPDATE');
-        /*SIGNAL SQLSTATE VALUE '45000' SET message_text='You cannot change the grade result,if it had already been finalized.'; */
+        SIGNAL SQLSTATE VALUE '45000' SET message_text = 'You cannot change the grade result,if it had already been finalized.';
     END IF;
 END$
 DELIMITER ;
@@ -654,7 +610,7 @@ BEGIN
 	SET @current_password=endex_password;
 	/*PSAXNW STO user.ADMINISTRATOR YPAREXEI.*/
 	SELECT userkind INTO @current_userkind FROM user WHERE username=@current_username AND password=@current_password;
-/* IF userkind=NULL => DE BRE8HKE*/
+    /* IF userkind=NULL => DE BRE8HKE*/
    	 IF (@current_userkind IS NULL) THEN
 		SELECT 'DE BRE8HKE TO SYGKEKRIMENO ACCOUNT.PLHKTROLOGEISTE "CALL LoginAccount(your Username,your Password);"';
     	ELSE
@@ -667,10 +623,10 @@ BEGIN
 /* ERWTHMA B */
 CREATE PROCEDURE Average (in specific_evaluator_username VARCHAR(12))
 BEGIN
-DECLARE specific_grade int(4);
+DECLARE specific_grade INT(4);
 DECLARE finished bool;
-declare loops_amount_finalization int(4);
-declare specific_avg float(4,1);
+DECLARE loops_amount_finalization int(4);
+DECLARE specific_avg FLOAT(4,1);
 
 DECLARE EvalCursor CURSOR FOR SELECT grade  FROM  evaluationresult WHERE evaluationresult.evaluator_username= specific_evaluator_username AND evaluationresult.grade IS NOT NULL;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished=false;
