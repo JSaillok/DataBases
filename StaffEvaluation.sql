@@ -10,8 +10,9 @@ CREATE TABLE user(
     name VARCHAR(25),
     surname VARCHAR(35),
     email VARCHAR(30),
-    reg_date DATE DEFAULT CURDATE(),                               /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */
+    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                               /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */
     userkind ENUM('MANAGER','EVALUTOR','EMPLOYEE','ADMINISTRATOR'),
+    INDEX UK(userkind),
     PRIMARY KEY (username)
 );
 
@@ -108,6 +109,11 @@ CREATE TABLE job(
     FOREIGN KEY(evaluator_username)
     REFERENCES evaluator(evaluator_username)
     ON DELETE CASCADE ON UPDATE CASCADE
+/*  CONSTRAINT const9
+    FOREIGN KEY(edra)
+    REFERENCES user(edra)
+    ON DELETE CASCADE ON UPDATE CASCADE
+*/    
 );
 
 CREATE TABLE antikeim(
@@ -205,10 +211,10 @@ CREATE TABLE has_degree(
     FOREIGN KEY(degr_title)
     REFERENCES degree(titlos)
     ON DELETE CASCADE ON UPDATE CASCADE,
-/*  CONSTRAINT const19
+    CONSTRAINT const19
     FOREIGN KEY(degr_idryma)
     REFERENCES degree(idryma)
-    ON DELETE CASCADE ON UPDATE CASCADE */
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE evaluationresult(
@@ -244,11 +250,11 @@ CREATE TABLE logs(
     CONSTRAINT const26    
     FOREIGN KEY(username)
     REFERENCES user(username)
-    ON DELETE CASCADE ON UPDATE CASCADE
-/*  CONSTRAINT const25
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const25
     FOREIGN KEY(userkind)
     REFERENCES user(userkind)
-    ON DELETE CASCADE ON UPDATE CASCADE*/
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -358,7 +364,7 @@ DELIMITER ;
 
 /*
 CREATE TRIGGER InsertDate
-AFTER INSERT  ON user
+AFTER INSERT ON user
 FOR EACH ROW
 SET reg_date=CURDATE();
 vgazei sfalma reg_date 
