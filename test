@@ -267,25 +267,25 @@ INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','
 INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
 INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece');
 
-INSERT INTO user VALUES('saillok','123456','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
-INSERT INTO user VALUES('aleksioy','123456','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
-INSERT INTO user VALUES('petselis','123456','IOANNIS','PETSELIS','petselis@gmail.com','2012-05-03','MANAGER');
-INSERT INTO user VALUES('xoulis','123456','TA3IARXHS','LYGIZOS','xoulis@gmail.com','2003-09-12','MANAGER');
-INSERT INTO user VALUES('dorzi','123456','NESLIE','DORZI','dorzi@gmail.com','1997-01-19','MANAGER');
+INSERT INTO user VALUES('saillok','12345','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
+INSERT INTO user VALUES('aleksioy','12345','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
+INSERT INTO user VALUES('petselis','12345','IOANNIS','PETSELIS','petselis@gmail.com','2012-05-03','MANAGER');
+INSERT INTO user VALUES('xoulis','12345','TA3IARXHS','LYGIZOS','xoulis@gmail.com','2003-09-12','MANAGER');
+INSERT INTO user VALUES('dorzi','12345','NESLIE','DORZI','dorzi@gmail.com','1997-01-19','MANAGER');
 
-INSERT INTO user VALUES('kerkidoy','123456','KONSTANTINA','KERKIDOY','kerkidoy@gmail.com','2000-01-07','EVALUATOR');
-INSERT INTO user VALUES('papagiannhs','123456','PAULOS','PAPAGIANNHS','papagiannhs@gmail.com','2008-12-19','EVALUATOR');
-INSERT INTO user VALUES('papanikolaou','123456','KOSTAS','PAPANIKOLAOU','papanikolaou@gmail.com','2004-02-22','EVALUATOR');
+INSERT INTO user VALUES('kerkidoy','12345','KONSTANTINA','KERKIDOY','kerkidoy@gmail.com','2000-01-07','EVALUATOR');
+INSERT INTO user VALUES('papagiannhs','12345','PAULOS','PAPAGIANNHS','papagiannhs@gmail.com','2008-12-19','EVALUATOR');
+INSERT INTO user VALUES('papanikolaou','12345','KOSTAS','PAPANIKOLAOU','papanikolaou@gmail.com','2004-02-22','EVALUATOR');
 
-INSERT INTO user VALUES('afentakh','123456','FLWRENTIA','AFENTAKH','afentakh@gmail.com','2010-10-28','EMPLOYEE');
-INSERT INTO user VALUES('paylidh','123456','SOFIA','PAYLIDH','paylidh@gmail.com','2016-03-15','EMPLOYEE');
-INSERT INTO user VALUES('papagewrgioy','123456','THANOS','PAPAGEWRGIOY','papagewrgioy@gmail.com','2013-05-14','EMPLOYEE');
-INSERT INTO user VALUES('spandwnh','123456','HLIANA','SPANDWNH','spandwnh@gmail.com','2017-04-13','EMPLOYEE');
-INSERT INTO user VALUES('karagiannhs','123456','HLIAS','KARAGIANNHS','karagiannhs@gmail.com','2020-10-17','EMPLOYEE');
-INSERT INTO user VALUES('mpakalhs','123456','SWTHRHS','MPAKALHS','mpakalhs@gmail.com','2019-11-23','EMPLOYEE');
-INSERT INTO user VALUES('ntova','123456','RAFAHLIA','NTOVA','ntova@gmail.com','2018-01-30','EMPLOYEE');
-INSERT INTO user VALUES('lame','123456','MPROUNA','LAME','lame@gmail.com','2016-02-25','EMPLOYEE');
-INSERT INTO user VALUES('kallaras','123456','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
+INSERT INTO user VALUES('afentakh','12345','FLWRENTIA','AFENTAKH','afentakh@gmail.com','2010-10-28','EMPLOYEE');
+INSERT INTO user VALUES('paylidh','12345','SOFIA','PAYLIDH','paylidh@gmail.com','2016-03-15','EMPLOYEE');
+INSERT INTO user VALUES('papagewrgioy','12345','THANOS','PAPAGEWRGIOY','papagewrgioy@gmail.com','2013-05-14','EMPLOYEE');
+INSERT INTO user VALUES('spandwnh','12345','HLIANA','SPANDWNH','spandwnh@gmail.com','2017-04-13','EMPLOYEE');
+INSERT INTO user VALUES('karagiannhs','12345','HLIAS','KARAGIANNHS','karagiannhs@gmail.com','2020-10-17','EMPLOYEE');
+INSERT INTO user VALUES('mpakalhs','12345','SWTHRHS','MPAKALHS','mpakalhs@gmail.com','2019-11-23','EMPLOYEE');
+INSERT INTO user VALUES('ntova','12345','RAFAHLIA','NTOVA','ntova@gmail.com','2018-01-30','EMPLOYEE');
+INSERT INTO user VALUES('lame','12345','MPROUNA','LAME','lame@gmail.com','2016-02-25','EMPLOYEE');
+INSERT INTO user VALUES('kallaras','12345','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
 
 
 INSERT INTO manager VALUES('saillok','15','143792558',);
