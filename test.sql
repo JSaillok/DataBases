@@ -10,7 +10,7 @@ CREATE TABLE user(
     name VARCHAR(25),
     surname VARCHAR(35),
     email VARCHAR(30),
---  reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,           /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */    
+--  reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */    
     reg_date DATE,
     userkind ENUM('MANAGER','EVALUATOR','EMPLOYEE','ADMINISTRATOR'),
     INDEX UK(userkind),
@@ -203,6 +203,7 @@ CREATE TABLE has_degree(
     empl_username VARCHAR(12) NOT NULL,
     degr_title VARCHAR(50) NOT NULL,
     degr_idryma VARCHAR(40) NOT NULL,
+    numgraduates INT(4),
     etos YEAR(4),
     grade FLOAT(3,1),
     PRIMARY KEY(degr_title,degr_idryma,empl_username),
@@ -224,7 +225,7 @@ CREATE TABLE evaluationresult(
     Evld INT(4) NOT NULL,
     empl_username VARCHAR(12) NOT NULL,
     evaluator_username VARCHAR(12) NOT NULL,
-    job_id INT(4),
+    job_id INT(4) NOT NULL,
     F1 INT(4),
     F2 INT(4),
     F3 INT(4),
@@ -331,7 +332,6 @@ BEGIN
     END IF;
 END$
 DELIMITER ;
-/* userkind den 3erei ti einai */
 
 /*
 CREATE TRIGGER InsertDate
@@ -392,7 +392,7 @@ BEGIN
 END$
 DELIMITER ;
 
-/* INSERT UPDATE DELETE DEGREES exw 8ema degr_idryma */
+/* INSERT UPDATE DELETE DEGREES */
 
 DELIMITER $
 CREATE TRIGGER InsertDegree
