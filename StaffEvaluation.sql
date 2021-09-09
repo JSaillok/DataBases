@@ -10,7 +10,7 @@ CREATE TABLE user(
     name VARCHAR(25),
     surname VARCHAR(35),
     email VARCHAR(30),
---  reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,           /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */    
+--  reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */    
     reg_date DATE,
     userkind ENUM('MANAGER','EVALUATOR','EMPLOYEE','ADMINISTRATOR'),
     INDEX UK(userkind),
@@ -287,7 +287,7 @@ INSERT INTO user VALUES('lame','12345','MPROUNA','LAME','lame@gmail.com','2016-0
 INSERT INTO user VALUES('kallaras','12345','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
 
 
-INSERT INTO manager VALUES('saillok',15,'143792558');
+INSERT INTO manager VALUES('saillok',15,'143792558',);
 INSERT INTO manager VALUES('aleksioy',9,'143792558');
 INSERT INTO manager VALUES('petselis',23,'268926487');
 INSERT INTO manager VALUES('xoulis',18,'268926487');
@@ -296,7 +296,7 @@ INSERT INTO manager VALUES('dorzi',13,'197832746');
 
 INSERT INTO evaluator VALUES('kerkidoy','143792558',8,NULL);
 INSERT INTO evaluator VALUES('papagiannhs','268926487',5,NULL);
-INSERT INTO evaluator VALUES('papanikolaou','197832746',10,NULL);
+INSERT INTO evaluator VALUES('papanikolaoy','197832746',10,NULL);
 
 
 INSERT INTO employee VALUES('afentakh','143792558',5,'phre me meso th doyleia','ISBL,Seminario prwtwn voh8eiwn',NULL,NULL);
