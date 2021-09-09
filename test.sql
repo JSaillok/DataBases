@@ -399,7 +399,7 @@ CREATE TRIGGER InsertDegree
 AFTER INSERT ON has_degree
 FOR EACH ROW
 BEGIN
-    INSERT INTO has_degree(has_title,degr_idryma,numgraduates) VALUES (NEW.degr_title,NEW.degr_idryma,1)
+    INSERT INTO has_degree(degr_title,degr_idryma,numgraduates) VALUES (NEW.degr_title,NEW.degr_idryma,1)
         ON DUPLICATE KEY UPDATE numgraduates=numgraduates+1;
 END$
 DELIMITER ;
@@ -416,31 +416,31 @@ BEGIN
     IF (deleted_numgraduates = 0) THEN
         DELETE FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
     ELSE
-        UPDATE has_degree SET numgraduates=deleted_numgraduates WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+        UPDATE degree SET numgraduates=deleted_numgraduates WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
     END IF;
 END$
 DELIMITER ;
-/*
+
 DELIMITER $
 CREATE TRIGGER UpdateDegree
-AFTER DELETE ON has_degree
+AFTER UPDATE ON has_degree
 FOR EACH ROW
 BEGIN
     DECLARE deleted_numgraduates int(4);
-    IF (OLD.degr_title <> NEW.degr_title OR OLD.degr_idryma<>NEW.degr_idryma) THEN
+    IF (OLD.degr_title <> NEW.degr_title or OLD.degr_idryma<>NEW.degr_idryma) THEN
         SELECT numgraduates INTO deleted_numgraduates FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
         SET deleted_numgraduates=deleted_numgraduates-1;
         IF (deleted_numgraduates = 0) THEN
-	        DELETE FROM degree WHERE has_degree.degr_title=Old.degr_title and has_degree.degr_idryma=OLD.degr_idryma;
+	        DELETE FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
         ELSE
-            UPDATE has_degree SET numgraduates=deleted_numgraduates WHERE degree.titlos=OLD.titlos AND has_degree.idryma=OLD.idryma;
+            UPDATE has_degree SET numgraduates=deleted_numgraduates WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
         END IF;
         INSERT INTO has_degree(degr_title,degr_idryma,numgraduates) VALUES (NEW.degr_title,NEW.degr_idryma,1)
         ON DUPLICATE KEY UPDATE numgraduates=numgraduates+1;
     END IF;
 END$
 DELIMITER ;
-*/
+
 /* APARAITHTES DHLWSEIS GIA JOB */
 
 DELIMITER $
