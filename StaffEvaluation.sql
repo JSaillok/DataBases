@@ -10,8 +10,9 @@ CREATE TABLE user(
     name VARCHAR(25),
     surname VARCHAR(35),
     email VARCHAR(30),
-    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                               /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */
-    userkind ENUM('MANAGER','EVALUTOR','EMPLOYEE','ADMINISTRATOR'),
+--  reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,           /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */    
+    reg_date DATE,
+    userkind ENUM('MANAGER','EVALUATOR','EMPLOYEE','ADMINISTRATOR'),
     INDEX UK(userkind),
     PRIMARY KEY (username)
 );
@@ -22,12 +23,12 @@ CREATE TABLE company(
     compname VARCHAR(35),
     phone BIGINT(16),
 
-    country VARCHAR(15),
     street VARCHAR(15),
     num TINYINT(4),
     city VARCHAR (15),
+    country VARCHAR(15),
 
-/*  edra VARCHAR(45) GENERATED ALWAYS AS (CONCAT(country,street,num,city)),*/
+--  edra VARCHAR(45) GENERATED ALWAYS AS (CONCAT(street,num,city,country)),
     PRIMARY KEY(AFM)
 );
 
@@ -65,6 +66,7 @@ CREATE TABLE evaluator(
 CREATE TABLE employee(
     empl_username VARCHAR(12) NOT NULL,
     AFM CHAR(9) NOT NULL,
+    exp_years TINYINT(4) NOT NULL,
     bio TEXT,
     sistatikes VARCHAR(35),
     certificates VARCHAR(35),
@@ -191,6 +193,7 @@ CREATE TABLE requestevaluation(
 CREATE TABLE degree(
     titlos VARCHAR(50) NOT NULL,
     idryma VARCHAR(40) NOT NULL,
+    INDEX IDEYM(idryma),
     numgraduates INT(4),
     bathmida ENUM('LYKEIO','UNIV','MASTER','PHD'),
     PRIMARY KEY(titlos,idryma)
@@ -259,87 +262,55 @@ CREATE TABLE logs(
 
 
 
-
-
-
-/*
---edw vale polloys kai meta xwrise toys ana kathgoria
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','saillok@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-INSERT INTO user VALUES('Saillok','1saillok1','IOANNIS','KOLLIAS','2000-01-07','@gmail.com');
-
-INSERT INTO manager VALUES('Saillok','2000','143792558');
-INSERT INTO manager VALUES('Aleksioy','1997','268926487');
-INSERT INTO manager VALUES('Petselis','2002','197832746');
-INSERT INTO manager VALUES('Tsintsinis','2012','964852314');
-INSERT INTO manager VALUES('Karpas','2006','364875613');
-INSERT INTO manager VALUES('Xoulis','2015','628731549');
-
-INSERT INTO evaluator VALUES('Kerkidoy','143792558');
-INSERT INTO evaluator VALUES('Papagiannhs','143792558');
-INSERT INTO evaluator VALUES('Papanikolaoy','268926487');
-INSERT INTO evaluator VALUES('Sigoyroy','268926487');
-INSERT INTO evaluator VALUES('Afentakh','268926487');
-INSERT INTO evaluator VALUES('','197832746');
-INSERT INTO evaluator VALUES('','197832746');
-INSERT INTO evaluator VALUES('','964852314');
-INSERT INTO evaluator VALUES('','964852314');
-INSERT INTO evaluator VALUES('','964852314');
-INSERT INTO evaluator VALUES('','364875613');
-INSERT INTO evaluator VALUES('','364875613');
-INSERT INTO evaluator VALUES('','364875613');
-INSERT INTO evaluator VALUES('','364875613');
-INSERT INTO evaluator VALUES('','628731549');
-INSERT INTO evaluator VALUES('','628731549');
-
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-INSERT INTO employee VALUES();
-
 INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece');
 INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
 INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece');
-INSERT INTO company VALUES('964852314','VOLOY','TechItSerious','2421354333','Georgioy','84','Volos','Greece');
-INSERT INTO company VALUES('364875613','EDESSAS','Unboxholics','2381058645','Papaflessa','15','Aridaia','Greece');
-INSERT INTO company VALUES('628731549','TRIPOLHS','Volt','2710246975','Aigioy','67','A8hna','Greece');
-*/
+
+INSERT INTO user VALUES('saillok','12345','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
+INSERT INTO user VALUES('aleksioy','12345','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
+INSERT INTO user VALUES('petselis','12345','IOANNIS','PETSELIS','petselis@gmail.com','2012-05-03','MANAGER');
+INSERT INTO user VALUES('xoulis','12345','TA3IARXHS','LYGIZOS','xoulis@gmail.com','2003-09-12','MANAGER');
+INSERT INTO user VALUES('dorzi','12345','NESLIE','DORZI','dorzi@gmail.com','1997-01-19','MANAGER');
+
+INSERT INTO user VALUES('kerkidoy','12345','KONSTANTINA','KERKIDOY','kerkidoy@gmail.com','2000-01-07','EVALUATOR');
+INSERT INTO user VALUES('papagiannhs','12345','PAULOS','PAPAGIANNHS','papagiannhs@gmail.com','2008-12-19','EVALUATOR');
+INSERT INTO user VALUES('papanikolaou','12345','KOSTAS','PAPANIKOLAOU','papanikolaou@gmail.com','2004-02-22','EVALUATOR');
+
+INSERT INTO user VALUES('afentakh','12345','FLWRENTIA','AFENTAKH','afentakh@gmail.com','2010-10-28','EMPLOYEE');
+INSERT INTO user VALUES('paylidh','12345','SOFIA','PAYLIDH','paylidh@gmail.com','2016-03-15','EMPLOYEE');
+INSERT INTO user VALUES('papagewrgioy','12345','THANOS','PAPAGEWRGIOY','papagewrgioy@gmail.com','2013-05-14','EMPLOYEE');
+INSERT INTO user VALUES('spandwnh','12345','HLIANA','SPANDWNH','spandwnh@gmail.com','2017-04-13','EMPLOYEE');
+INSERT INTO user VALUES('karagiannhs','12345','HLIAS','KARAGIANNHS','karagiannhs@gmail.com','2020-10-17','EMPLOYEE');
+INSERT INTO user VALUES('mpakalhs','12345','SWTHRHS','MPAKALHS','mpakalhs@gmail.com','2019-11-23','EMPLOYEE');
+INSERT INTO user VALUES('ntova','12345','RAFAHLIA','NTOVA','ntova@gmail.com','2018-01-30','EMPLOYEE');
+INSERT INTO user VALUES('lame','12345','MPROUNA','LAME','lame@gmail.com','2016-02-25','EMPLOYEE');
+INSERT INTO user VALUES('kallaras','12345','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
+
+
+INSERT INTO manager VALUES('saillok',15,'143792558');
+INSERT INTO manager VALUES('aleksioy',9,'143792558');
+INSERT INTO manager VALUES('petselis',23,'268926487');
+INSERT INTO manager VALUES('xoulis',18,'268926487');
+INSERT INTO manager VALUES('dorzi',13,'197832746');
+
+
+INSERT INTO evaluator VALUES('kerkidoy','143792558',8,NULL);
+INSERT INTO evaluator VALUES('papagiannhs','268926487',5,NULL);
+INSERT INTO evaluator VALUES('papanikolaou','197832746',10,NULL);
+
+
+INSERT INTO employee VALUES('afentakh','143792558',5,'phre me meso th doyleia','ISBL,Seminario prwtwn voh8eiwn',NULL,NULL);
+INSERT INTO employee VALUES('paylidh','143792558',10,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('papagewrgioy','143792558',12,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('spandwnh','143792558',2,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('karagiannhs','268926487',6,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('mpakalhs','268926487',8,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('ntova','268926487',15,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('lame','197832746',3,NULL,NULL,NULL,NULL);
+INSERT INTO employee VALUES('kallaras','197832746',1,NULL,NULL,NULL,NULL);
+
+
+
 
 
 SET @current_username='';
