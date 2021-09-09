@@ -67,7 +67,6 @@ CREATE TABLE employee(
     empl_username VARCHAR(12) NOT NULL,
     AFM CHAR(9) NOT NULL,
     exp_years TINYINT(4) NOT NULL,
-    comp_years TINYINT(4) NOT NULL,
     bio TEXT,
     sistatikes VARCHAR(35),
     certificates VARCHAR(35),
