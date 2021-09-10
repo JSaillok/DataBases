@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS staffevaluation;
 
 CREATE DATABASE staffevaluation;
 
-USE staffevaluation;
+USE extra1;
 
 CREATE TABLE user(
     username VARCHAR(12) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE company(
     city VARCHAR (15),
     country VARCHAR(15),
 
-    edra VARCHAR(45) GENERATED ALWAYS AS (CONCAT(street,num,city,country)),
+    edra VARCHAR(55) generated always as (CONCAT(street,num,city,country)),
     INDEX EDRA(edra),
     PRIMARY KEY(AFM)
 );
@@ -99,8 +99,8 @@ CREATE TABLE job(
     evaluator_username VARCHAR(12) NOT NULL,
     salary FLOAT(6,1),
     position VARCHAR(40),
-    edra VARCHAR(45), 
-    announce_date DATETIME DEFAULT NOW(),
+    edra VARCHAR(55), 
+    announcedate DATETIME DEFAULT NOW(),
     SubmissionDate DATE NOT NULL,
     PRIMARY KEY(job_id,AFM),
     INDEX SUB(SubmissionDate),
@@ -255,9 +255,9 @@ CREATE TABLE logs(
 
 
 
-INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece');
-INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
-INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece');
+INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece',DEFAULT);
+INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece',DEFAULT);
+INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece',DEFAULT);
 
 INSERT INTO user VALUES('saillok','12345','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
 INSERT INTO user VALUES('aleksioy','12345','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
@@ -280,7 +280,7 @@ INSERT INTO user VALUES('lame','12345','MPROUNA','LAME','lame@gmail.com','2016-0
 INSERT INTO user VALUES('kallaras','12345','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
 
 
-INSERT INTO manager VALUES('saillok',15,'143792558',);
+INSERT INTO manager VALUES('saillok',15,'143792558');
 INSERT INTO manager VALUES('aleksioy',9,'143792558');
 INSERT INTO manager VALUES('petselis',23,'268926487');
 INSERT INTO manager VALUES('xoulis',18,'268926487');
@@ -289,7 +289,7 @@ INSERT INTO manager VALUES('dorzi',13,'197832746');
 
 INSERT INTO evaluator VALUES('kerkidoy','143792558',8,NULL);
 INSERT INTO evaluator VALUES('papagiannhs','268926487',5,NULL);
-INSERT INTO evaluator VALUES('papanikolaoy','197832746',10,NULL);
+INSERT INTO evaluator VALUES('papanikolaou','197832746',10,NULL);
 
 
 INSERT INTO employee VALUES('afentakh','143792558',5,'phre me meso th doyleia','ISBL,Seminario prwtwn voh8eiwn',NULL,NULL);
@@ -406,7 +406,7 @@ BEGIN
     SET deleted_numgraduates=deleted_numgraduates-1;
 
     IF (deleted_numgraduates = 0) THEN
-        DELETE FROM degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+        DELETE FROM degree WHERE has_degree.titlos=OLD.titlos AND has_degree.idryma=OLD.idryma;
     ELSE
         UPDATE degree SET numgraduates=deleted_numgraduates WHERE degree.titlos=OLD.titlos AND degree.idryma=OLD.idryma;
     END IF;
@@ -414,7 +414,7 @@ END$
 
 
 CREATE TRIGGER UpdateDegree
-AFTER DELETE ON has_degree
+AFTER UPDATE ON has_degree
 FOR EACH ROW
 BEGIN
     DECLARE deleted_numgraduates int(4);
@@ -422,7 +422,7 @@ BEGIN
         SELECT numgraduates INTO deleted_numgraduates FROM degree WHERE degree.titlos=OLD.titlos AND degree.idryma=OLD.idryma;
         SET deleted_numgraduates=deleted_numgraduates-1;
         IF (deleted_numgraduates = 0) THEN
-	        DELETE FROM degree WHERE has_degree.degr_title=Old.degr_title and  has_degree.degr_idryma=OLD.degr_idryma;
+	        DELETE FROM degree WHERE has_degree.titlos=Old.titlos and  has_degree.idryma=OLD.idryma;
         ELSE
             UPDATE degree set numgraduates=deleted_numgraduates WHERE degree.titlos=OLD.titlos and degree.idryma=OLD.idryma;
         END IF;
