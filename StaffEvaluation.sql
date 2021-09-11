@@ -28,8 +28,8 @@ CREATE TABLE company(
     city VARCHAR (15),
     country VARCHAR(15),
 
-    edra VARCHAR(55) generated always as (CONCAT(street,num,city,country)),
-    INDEX EDRA(edra),
+--     edra VARCHAR(55) generated always as (CONCAT(street,num,city,country)),
+--     INDEX EDRA(edra),
     PRIMARY KEY(AFM)
 );
 
@@ -111,11 +111,11 @@ CREATE TABLE job(
     CONSTRAINT const8
     FOREIGN KEY(evaluator_username)
     REFERENCES evaluator(evaluator_username)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const9
-    FOREIGN KEY(edra)
-    REFERENCES company(edra)
-    ON DELETE CASCADE ON UPDATE CASCADE    
+    ON DELETE CASCADE ON UPDATE CASCADE
+--     CONSTRAINT const9
+--     FOREIGN KEY(edra)
+--     REFERENCES company(edra)
+--     ON DELETE CASCADE ON UPDATE CASCADE    
 );
 
 CREATE TABLE antikeim(
@@ -255,9 +255,9 @@ CREATE TABLE logs(
 
 
 
-INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece',DEFAULT);
-INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece',DEFAULT);
-INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece',DEFAULT);
+INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece');
+INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
+INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece');
 
 INSERT INTO user VALUES('saillok','12345','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
 INSERT INTO user VALUES('aleksioy','12345','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
