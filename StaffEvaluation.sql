@@ -341,15 +341,15 @@ BEFORE UPDATE ON company
 FOR EACH ROW
 BEGIN
 	IF (NEW.AFM<>OLD.AFM) THEN
-		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'H TIMH AYTH DEN ALLAZEI.';
 		Set NEW.AFM=OLD.AFM;
     END IF;
     IF (NEW.DOY<>OLD.DOY) THEN
-		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'H TIMH AYTH DEN ALLAZEI.';
         Set NEW.AFM=OLD.AFM;
     END IF;
     IF (NEW.compname <> OLD.compname) THEN
-		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'H TIMH AYTH DEN ALLAZEI.';
 		Set NEW.compname=OLD.compname;
      END IF;
 END$
@@ -515,7 +515,7 @@ FOR EACH ROW
 BEGIN
     IF (OLD.grade <> NEW.grade AND OLD.grade IS NOT NULL AND @current_userkind<>'ADMINISTRATOR') THEN
         CALL FailureLog('evaluationresult','UPDATE');
-        SIGNAL SQLSTATE VALUE '45000' SET message_text = 'You cannot change the grade result,if it had already been finalized.';
+        SIGNAL SQLSTATE VALUE '45000' SET message_text = 'O vathmos den mporei na allaxtei ap th stigmh poy exei oristikopoih8ei.';
     END IF;
 END$
 DELIMITER ;
@@ -642,7 +642,8 @@ DELIMITER ;
 
 /* D */
 DELIMITER $
-CREATE PROCEDURE FinalizeEvaluations (IN Particular_job_id INT) BEGIN
+CREATE PROCEDURE FinEvaluations (IN Particular_job_id INT) 
+BEGIN
 DECLARE Particular_empl_username VARCHAR(12);
 DECLARE Particular_evaluator_username VARCHAR(12);
 DECLARE Particular_F1 INT(4);
@@ -677,16 +678,17 @@ DELIMITER ;
 /* E */
 DELIMITER $
 CREATE PROCEDURE FinishedEvaluations (in Demanded_job_id int )
- BEGIN
+BEGIN
    DECLARE NumRequests INT(8);
    DECLARE NumUnansweredRequests INT(8);
    Select COUNT(job_id) INTO NumRequests FROM evaluationresult WHERE job_id=Demanded_job_id;
    SELECT COUNT(job_id) INTO NumUnansweredRequests FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NULL;
    
    IF  (NumRequests>0) then               /*Diladi uparxoun request pou exonu ginei ews tora gia na proxorisoume*/
-      IF (NumUnansweredRequests=0) then Select 'All Requests for this job have been fully evaluated.';
+      IF (NumUnansweredRequests=0) then Select 'OLA TA AITHMATA GIA AYTHN TH DOYLEIA EXOYN A3IOLOGH8EI PLHRWS.';
 	  END IF;
-      SELECT empl_username AS 'Candidate',grade FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NOT NULL ORDER BY grade Desc;     /*Dinoume sto username eidiko onoma kai oxi sto grade,giati to grade einai column eidiko
+      SELECT empl_username AS 'Candidate',grade FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NOT NULL ORDER BY grade Desc;     
+      /*Dinoume sto username eidiko onoma kai oxi sto grade,giati to grade einai column eidiko
       gia to table auto eno to empl_username einai genika opou uparxei username ypallilou*/
 	  IF (NumUnansweredRequests>0) THEN SELECT NumUnansweredRequests;
 	  END IF;
@@ -698,7 +700,8 @@ DELIMITER ;
 
 /* ST */
 DELIMITER $
-CREATE PROCEDURE Particular_Employee_Requests (in particular_name varchar(25),in particular_surname varchar(35)) BEGIN
+CREATE PROCEDURE ParticularEmployeeRequests (in particular_name varchar(25),in particular_surname varchar(35))
+BEGIN
     DECLARE particular_job_id INT(8);
     DECLARE particular_grade INT(4);
     DECLARE finished TINYINT(2);
