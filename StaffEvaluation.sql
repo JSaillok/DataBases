@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS staffevaluation;
 
 CREATE DATABASE staffevaluation;
 
-USE extra1;
+USE stuffevaluation;
 
 CREATE TABLE user(
     username VARCHAR(12) NOT NULL,
