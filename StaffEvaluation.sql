@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS staffevaluation;
 
 CREATE DATABASE staffevaluation;
 
-USE stuffevaluation;
+USE staffevaluation;
 
 CREATE TABLE user(
     username VARCHAR(12) NOT NULL,
@@ -28,8 +28,8 @@ CREATE TABLE company(
     city VARCHAR (15),
     country VARCHAR(15),
 
---     edra VARCHAR(55) generated always as (CONCAT(street,num,city,country)),
---     INDEX EDRA(edra),
+    -- edra VARCHAR(55) generated always as (CONCAT(street,num,city,country)),
+    -- INDEX EDRA(edra),
     PRIMARY KEY(AFM)
 );
 
@@ -112,10 +112,10 @@ CREATE TABLE job(
     FOREIGN KEY(evaluator_username)
     REFERENCES evaluator(evaluator_username)
     ON DELETE CASCADE ON UPDATE CASCADE
---     CONSTRAINT const9
---     FOREIGN KEY(edra)
---     REFERENCES company(edra)
---     ON DELETE CASCADE ON UPDATE CASCADE    
+    -- CONSTRAINT const9
+    -- FOREIGN KEY(edra)
+    -- REFERENCES company(edra)
+    -- ON DELETE CASCADE ON UPDATE CASCADE    
 );
 
 CREATE TABLE antikeim(
@@ -255,12 +255,12 @@ CREATE TABLE logs(
 
 
 
-INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece');
-INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
-INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece');
+INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece'/*,DEFAULT*/);
+INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece'/*,DEFAULT*/);
+INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece'/*,DEFAULT*/);
 
 INSERT INTO user VALUES('saillok','12345','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
-INSERT INTO user VALUES('aleksioy','12345','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
+INSERT INTO user VALUES('alexiou','12345','STAVROS','ALEXIOU','aleksiou@gmail.com','2005-11-27','MANAGER');
 INSERT INTO user VALUES('petselis','12345','IOANNIS','PETSELIS','petselis@gmail.com','2012-05-03','MANAGER');
 INSERT INTO user VALUES('xoulis','12345','TA3IARXHS','LYGIZOS','xoulis@gmail.com','2003-09-12','MANAGER');
 INSERT INTO user VALUES('dorzi','12345','NESLIE','DORZI','dorzi@gmail.com','1997-01-19','MANAGER');
@@ -279,9 +279,10 @@ INSERT INTO user VALUES('ntova','12345','RAFAHLIA','NTOVA','ntova@gmail.com','20
 INSERT INTO user VALUES('lame','12345','MPROUNA','LAME','lame@gmail.com','2016-02-25','EMPLOYEE');
 INSERT INTO user VALUES('kallaras','12345','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
 
+INSERT INTO user VALUES('mellos','12345','THODORIS','MELLOS','mellos@gmail.com','1997-05-11','ADMINISTRATOR');
 
 INSERT INTO manager VALUES('saillok',15,'143792558');
-INSERT INTO manager VALUES('aleksioy',9,'143792558');
+INSERT INTO manager VALUES('alexiou',9,'143792558');
 INSERT INTO manager VALUES('petselis',23,'268926487');
 INSERT INTO manager VALUES('xoulis',18,'268926487');
 INSERT INTO manager VALUES('dorzi',13,'197832746');
@@ -303,7 +304,23 @@ INSERT INTO employee VALUES('lame','197832746',3,NULL,NULL,NULL,NULL);
 INSERT INTO employee VALUES('kallaras','197832746',1,NULL,NULL,NULL,NULL);
 
 
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('143792558','kerkidoy',1200,'Omiroy 26 Nafplio Greece','hxolhpths','2021-10-19');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('143792558','kerkidoy',1300,'Omiroy 26 Nafplio Greece','Drumer','2021-05-08');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('268926487','papagiannhs',900,'Eyripidi 1 A8hna Greece','Pwlhths','2021-11-06');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('268926487','papagiannhs',1250,'Eyripidi 1 A8hna Greece','Synthrhths','2021-02-10');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('197832746','papanikolaou',1400,'Konstantinoy 102 Livadeia Greece','Geoponos','2021-04-19');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('197832746','papanikolaou',850,'Konstantinoy 102 Livadeia Greece','Pwlhths','2021-08-25');
 
+
+INSERT INTO has_degree VALUES ('afentakh','COMPUTERS','PLHROFORIKH',2009,8,'MASTER');
+INSERT INTO has_degree VALUES ('paylidh','COMPUTERS','CEID',2006,7,'MASTER');
+
+
+INSERT INTO needs VALUES (1,'SQL');
+INSERT INTO needs VALUES (1,'C');
+
+
+INSERT INTO antikeim(title) VALUES ('SQL');
 
 
 SET @current_username='';
