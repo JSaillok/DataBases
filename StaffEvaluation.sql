@@ -119,27 +119,27 @@ CREATE TABLE job(
 );
 
 CREATE TABLE antikeim(
-    title VARCHAR(36) NOT NULL,
+    antikeim_title VARCHAR(36) NOT NULL,
     descr TINYTEXT,
     belongs_to VARCHAR(36) NOT NULL,
-    PRIMARY KEY(title),
+    PRIMARY KEY(antikeim_title),
     CONSTRAINT const10
     FOREIGN KEY(belongs_to)
-    REFERENCES antikeim(title)
+    REFERENCES antikeim(antikeim_title)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE needs(
     job_id INT(4) NOT NULL,
-    antikeim_title VARCHAR(36),
+    antikeim_title VARCHAR(36) NOT NULL,
     PRIMARY KEY(job_id,antikeim_title),
-    CONSTRAINT const11
-    FOREIGN KEY(antikeim_title)
-    REFERENCES antikeim(title)
-    ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT const12
     FOREIGN KEY(job_id)
     REFERENCES job(job_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT const11
+    FOREIGN KEY(antikeim_title)
+    REFERENCES antikeim(antikeim_title)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -316,11 +316,12 @@ INSERT INTO has_degree VALUES ('afentakh','COMPUTERS','PLHROFORIKH',2009,8,'MAST
 INSERT INTO has_degree VALUES ('paylidh','COMPUTERS','CEID',2006,7,'MASTER');
 
 
-INSERT INTO needs VALUES (1,'SQL');
-INSERT INTO needs VALUES (1,'C');
+-- INSERT INTO needs(job_id,antikeim_title) VALUES (1,'SQL');
+-- INSERT INTO needs(job_id,antikeim_title) VALUES (1,'C');
+
+-- INSERT INTO antikeim(antikeim_title) VALUES ('SQL');
 
 
-INSERT INTO antikeim(title) VALUES ('SQL');
 
 
 SET @current_username='';
@@ -341,7 +342,7 @@ BEGIN
     END IF;
 END$
 DELIMITER ;
-/* userkind den 3erei ti einai */
+
 
 /*
 CREATE TRIGGER InsertDate
@@ -611,26 +612,26 @@ CREATE PROCEDURE Average (in specific_evaluator_username VARCHAR(12))
 BEGIN
     DECLARE specific_grade INT;
     DECLARE finished bool;
-    DECLARE loops_amount_finalization int(4);
+    DECLARE numloopsfinalization int(4);
     DECLARE specific_avg FLOAT(4,1);
 
     DECLARE EvalCursor CURSOR FOR SELECT grade  FROM  evaluationresult WHERE evaluationresult.evaluator_username= specific_evaluator_username AND evaluationresult.grade IS NOT NULL;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished=false;
 
     SET specific_avg=0;
-    SET loops_amount_finalization=0;
+    SET numloopsfinalization=0;
     OPEN EvalCursor;
     SET finished=true;
     FETCH EvalCursor INTO specific_grade;
 
     WHILE (finished=true) DO
-        SET loops_amount_finalization=loops_amount_finalization+1;
+        SET numloopsfinalization=numloopsfinalization+1;
         SET specific_avg=specific_avg+specific_grade;
         FETCH EvalCursor INTO specific_grade;
     END WHILE;
 
 CLOSE EvalCursor;
-SET specific_avg=specific_avg/loops_amount_finalization;
+SET specific_avg=specific_avg/numloopsfinalization;
 UPDATE evaluator SET evaluator.avr_grade=specific_avg WHERE evaluator.evaluator_username=specific_evaluator_username;
 END$
 DELIMITER ;
