@@ -28,8 +28,8 @@ CREATE TABLE company(
     city VARCHAR (15),
     country VARCHAR(15),
 
-   --  edra VARCHAR(45) GENERATED ALWAYS AS (CONCAT(street,num,city,country)),
---     INDEX EDRA(edra),
+    -- edra VARCHAR(55) generated always as (CONCAT(street,num,city,country)),
+    -- INDEX EDRA(edra),
     PRIMARY KEY(AFM)
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE evaluator(
     evaluator_username VARCHAR(12) NOT NULL,
     AFM CHAR(9) NOT NULL,
     exp_years TINYINT(4) NOT NULL,
-    average_grade FLOAT(4,1),
+    avr_grade FLOAT(4,1),
     PRIMARY KEY (evaluator_username),
     CONSTRAINT const3
     FOREIGN KEY(evaluator_username)
@@ -99,8 +99,8 @@ CREATE TABLE job(
     evaluator_username VARCHAR(12) NOT NULL,
     salary FLOAT(6,1),
     position VARCHAR(40),
-    edra VARCHAR(45), 
-    announce_date DATETIME DEFAULT NOW(),
+    edra VARCHAR(55), 
+    announcedate DATETIME DEFAULT NOW(),
     SubmissionDate DATE NOT NULL,
     PRIMARY KEY(job_id,AFM),
     INDEX SUB(SubmissionDate),
@@ -113,9 +113,9 @@ CREATE TABLE job(
     REFERENCES evaluator(evaluator_username)
     ON DELETE CASCADE ON UPDATE CASCADE
     -- CONSTRAINT const9
---     FOREIGN KEY(edra)
---     REFERENCES user(edra)
---     ON DELETE CASCADE ON UPDATE CASCADE    
+    -- FOREIGN KEY(edra)
+    -- REFERENCES company(edra)
+    -- ON DELETE CASCADE ON UPDATE CASCADE    
 );
 
 CREATE TABLE antikeim(
@@ -194,29 +194,22 @@ CREATE TABLE degree(
     titlos VARCHAR(50) NOT NULL,
     idryma VARCHAR(40) NOT NULL,
     INDEX IDEYM(idryma),
+    numgraduates INT(4),
     bathmida ENUM('LYKEIO','UNIV','MASTER','PHD'),
     PRIMARY KEY(titlos,idryma)
 );
 
 CREATE TABLE has_degree(
     empl_username VARCHAR(12) NOT NULL,
-    degr_title VARCHAR(50) NOT NULL,
-    degr_idryma VARCHAR(40) NOT NULL,
-    numgraduates INT(4),
+    titlos VARCHAR(50) NOT NULL,
+    idryma VARCHAR(40) NOT NULL,
     etos YEAR(4),
     grade FLOAT(3,1),
-    PRIMARY KEY(empl_username,degr_title,degr_idryma),
+    bathmida ENUM('LYKEIO','UNIV','MASTER','PHD'),
+    PRIMARY KEY(titlos,idryma,empl_username),
     CONSTRAINT const20
     FOREIGN KEY(empl_username)
     REFERENCES employee(empl_username)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const18
-    FOREIGN KEY(degr_title)
-    REFERENCES degree(titlos)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT const19
-    FOREIGN KEY(degr_idryma)
-    REFERENCES degree(idryma)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -224,7 +217,7 @@ CREATE TABLE evaluationresult(
     Evld INT(4) NOT NULL,
     empl_username VARCHAR(12) NOT NULL,
     evaluator_username VARCHAR(12) NOT NULL,
-    job_id INT(4) NOT NULL,
+    job_id INT(4),
     F1 INT(4),
     F2 INT(4),
     F3 INT(4),
@@ -262,12 +255,12 @@ CREATE TABLE logs(
 
 
 
-INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece');
-INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
-INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece');
+INSERT INTO company VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece'/*,DEFAULT*/);
+INSERT INTO company VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece'/*,DEFAULT*/);
+INSERT INTO company VALUES('197832746','LIBADEIAS','ArgoFarm','2261085946','Konstantinoy','102','Livadeia','Greece'/*,DEFAULT*/);
 
 INSERT INTO user VALUES('saillok','12345','IOANNIS','KOLLIAS','saillok@gmail.com','1999-09-18','MANAGER');
-INSERT INTO user VALUES('aleksioy','12345','STAVROS','ALEKSIOY','aleksioy@gmail.com','2005-11-27','MANAGER');
+INSERT INTO user VALUES('alexiou','12345','STAVROS','ALEXIOU','aleksiou@gmail.com','2005-11-27','MANAGER');
 INSERT INTO user VALUES('petselis','12345','IOANNIS','PETSELIS','petselis@gmail.com','2012-05-03','MANAGER');
 INSERT INTO user VALUES('xoulis','12345','TA3IARXHS','LYGIZOS','xoulis@gmail.com','2003-09-12','MANAGER');
 INSERT INTO user VALUES('dorzi','12345','NESLIE','DORZI','dorzi@gmail.com','1997-01-19','MANAGER');
@@ -286,10 +279,10 @@ INSERT INTO user VALUES('ntova','12345','RAFAHLIA','NTOVA','ntova@gmail.com','20
 INSERT INTO user VALUES('lame','12345','MPROUNA','LAME','lame@gmail.com','2016-02-25','EMPLOYEE');
 INSERT INTO user VALUES('kallaras','12345','NTINOS','KALLARAS','kallaras@gmail.com','2015-06-20','EMPLOYEE');
 
-INSERT INTO user VALUES('mellos','12345','THODORIS','MELLOS','mellos@gmail.com','1997-05-16','ADMINISTRATOR');
+INSERT INTO user VALUES('mellos','12345','THODORIS','MELLOS','mellos@gmail.com','1997-05-11','ADMINISTRATOR');
 
 INSERT INTO manager VALUES('saillok',15,'143792558');
-INSERT INTO manager VALUES('aleksioy',9,'143792558');
+INSERT INTO manager VALUES('alexiou',9,'143792558');
 INSERT INTO manager VALUES('petselis',23,'268926487');
 INSERT INTO manager VALUES('xoulis',18,'268926487');
 INSERT INTO manager VALUES('dorzi',13,'197832746');
@@ -299,22 +292,6 @@ INSERT INTO evaluator VALUES('kerkidoy','143792558',8,NULL);
 INSERT INTO evaluator VALUES('papagiannhs','268926487',5,NULL);
 INSERT INTO evaluator VALUES('papanikolaou','197832746',10,NULL);
 
-/*
-INSERT INTO has_degree VALUES('Computers','Plhroforikh','afentakh','','MASTER')
-
-insert into has_degree(titlos,idryma,username_employee,etos,grade,bathmida) values ('Computers','Ceid','afERMAlneUm',2004,7,'MASTER');$
-
-insert into has_degree(titlos,idryma,username_employee,etos,grade,bathmida) values ('Computers','Ceid','ALMYRNiCAJA',2006,8,'MASTER');$
-
-insert into required_knowledge(job_id,title_of_knowledge) values (5,'Psarema')$
- 
-  insert into required_knowledge(job_id,title_of_knowledge) values (5,'Xaitheuma zontanou psariou')$
-
-insert into knowledge(title_of_knowledge) values ('Psarema);
- 
-  insert into required_knowledge(title_of_knowledge, knowledge_is_part_of) values ('Xaitheuma zontanou psariou', knowledge_is_part_of)΄΄
-
-*/
 
 INSERT INTO employee VALUES('afentakh','143792558',5,'phre me meso th doyleia','ISBL,Seminario prwtwn voh8eiwn',NULL,NULL);
 INSERT INTO employee VALUES('paylidh','143792558',10,NULL,NULL,NULL,NULL);
@@ -326,13 +303,24 @@ INSERT INTO employee VALUES('ntova','268926487',15,NULL,NULL,NULL,NULL);
 INSERT INTO employee VALUES('lame','197832746',3,NULL,NULL,NULL,NULL);
 INSERT INTO employee VALUES('kallaras','197832746',1,NULL,NULL,NULL,NULL);
 
--- INSERT INTO job VALUES(NULL,'143792558','kerkidoy',1200,'hxolhpths');
--- INSERT INTO job VALUES(NULL,'143792558','kerkidoy',1300,'Drumer');
--- INSERT INTO job VALUES(NULL,'268926487','papagiannhs',900,'Pwlhths');
--- INSERT INTO job VALUES(NULL,'268926487','papagiannhs',1250,'Synthrhths');
--- INSERT INTO job VALUES(NULL,'197832746','papanikolaou',1400,'Geoponos');
--- INSERT INTO job VALUES(NULL,'197832746','papanikolaou',850,'Pwlhths');
 
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('143792558','kerkidoy',1200,'Omiroy 26 Nafplio Greece','hxolhpths','2021-10-19');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('143792558','kerkidoy',1300,'Omiroy 26 Nafplio Greece','Drumer','2021-05-08');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('268926487','papagiannhs',900,'Eyripidi 1 A8hna Greece','Pwlhths','2021-11-06');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('268926487','papagiannhs',1250,'Eyripidi 1 A8hna Greece','Synthrhths','2021-02-10');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('197832746','papanikolaou',1400,'Konstantinoy 102 Livadeia Greece','Geoponos','2021-04-19');
+INSERT INTO job(AFM,evaluator_username,salary,position,edra,SubmissionDate) VALUES('197832746','papanikolaou',850,'Konstantinoy 102 Livadeia Greece','Pwlhths','2021-08-25');
+
+
+INSERT INTO has_degree VALUES ('afentakh','COMPUTERS','PLHROFORIKH',2009,8,'MASTER');
+INSERT INTO has_degree VALUES ('paylidh','COMPUTERS','CEID',2006,7,'MASTER');
+
+
+INSERT INTO needs VALUES (1,'SQL');
+INSERT INTO needs VALUES (1,'C');
+
+
+INSERT INTO antikeim(title) VALUES ('SQL');
 
 
 SET @current_username='';
@@ -353,6 +341,7 @@ BEGIN
     END IF;
 END$
 DELIMITER ;
+/* userkind den 3erei ti einai */
 
 /*
 CREATE TRIGGER InsertDate
@@ -369,15 +358,15 @@ BEFORE UPDATE ON company
 FOR EACH ROW
 BEGIN
 	IF (NEW.AFM<>OLD.AFM) THEN
-		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'H TIMH AYTH DEN ALLAZEI.';
 		Set NEW.AFM=OLD.AFM;
     END IF;
     IF (NEW.DOY<>OLD.DOY) THEN
-		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'H TIMH AYTH DEN ALLAZEI.';
         Set NEW.AFM=OLD.AFM;
     END IF;
     IF (NEW.compname <> OLD.compname) THEN
-		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'You cannot change this value.';
+		SIGNAL SQLSTATE VALUE '45000' SET message_text =  'H TIMH AYTH DEN ALLAZEI.';
 		Set NEW.compname=OLD.compname;
      END IF;
 END$
@@ -413,50 +402,48 @@ BEGIN
 END$
 DELIMITER ;
 
-/* INSERT UPDATE DELETE DEGREES */
+/* INSERT UPDATE DELETE DEGREES exw 8ema degr_idryma */
 
 DELIMITER $
 CREATE TRIGGER InsertDegree
 AFTER INSERT ON has_degree
 FOR EACH ROW
 BEGIN
-    INSERT INTO has_degree(degr_title,degr_idryma,numgraduates) VALUES (NEW.degr_title,NEW.degr_idryma,1)
+    INSERT INTO degree(titlos,idryma,numgraduates) VALUES (NEW.titlos,NEW.idryma,1)
         ON DUPLICATE KEY UPDATE numgraduates=numgraduates+1;
 END$
-DELIMITER ;
 
-DELIMITER $
+
 CREATE TRIGGER DeleteDegree
 AFTER DELETE ON has_degree
 FOR EACH ROW
 BEGIN
     DECLARE deleted_numgraduates int(4);
-    SELECT numgraduates INTO deleted_numgraduates FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+    SELECT numgraduates INTO deleted_numgraduates FROM degree WHERE degree.titlos=OLD.titlos AND degree.idryma=OLD.idryma;
     SET deleted_numgraduates=deleted_numgraduates-1;
 
     IF (deleted_numgraduates = 0) THEN
-        DELETE FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+        DELETE FROM degree WHERE has_degree.titlos=OLD.titlos AND has_degree.idryma=OLD.idryma;
     ELSE
-        UPDATE degree SET numgraduates=deleted_numgraduates WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+        UPDATE degree SET numgraduates=deleted_numgraduates WHERE degree.titlos=OLD.titlos AND degree.idryma=OLD.idryma;
     END IF;
 END$
-DELIMITER ;
 
-DELIMITER $
+
 CREATE TRIGGER UpdateDegree
 AFTER UPDATE ON has_degree
 FOR EACH ROW
 BEGIN
     DECLARE deleted_numgraduates int(4);
-    IF (OLD.degr_title <> NEW.degr_title or OLD.degr_idryma<>NEW.degr_idryma) THEN
-        SELECT numgraduates INTO deleted_numgraduates FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+    IF (OLD.titlos <> NEW.titlos or OLD.idryma<>NEW.idryma) THEN
+        SELECT numgraduates INTO deleted_numgraduates FROM degree WHERE degree.titlos=OLD.titlos AND degree.idryma=OLD.idryma;
         SET deleted_numgraduates=deleted_numgraduates-1;
         IF (deleted_numgraduates = 0) THEN
-	        DELETE FROM has_degree WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+	        DELETE FROM degree WHERE has_degree.titlos=Old.titlos and  has_degree.idryma=OLD.idryma;
         ELSE
-            UPDATE has_degree SET numgraduates=deleted_numgraduates WHERE has_degree.degr_title=OLD.degr_title AND has_degree.degr_idryma=OLD.degr_idryma;
+            UPDATE degree set numgraduates=deleted_numgraduates WHERE degree.titlos=OLD.titlos and degree.idryma=OLD.idryma;
         END IF;
-        INSERT INTO has_degree(degr_title,degr_idryma,numgraduates) VALUES (NEW.degr_title,NEW.degr_idryma,1)
+        INSERT INTO degree(titlos,idryma,numgraduates) VALUES (NEW.titlos,NEW.idryma,1)
         ON DUPLICATE KEY UPDATE numgraduates=numgraduates+1;
     END IF;
 END$
@@ -545,7 +532,7 @@ FOR EACH ROW
 BEGIN
     IF (OLD.grade <> NEW.grade AND OLD.grade IS NOT NULL AND @current_userkind<>'ADMINISTRATOR') THEN
         CALL FailureLog('evaluationresult','UPDATE');
-        SIGNAL SQLSTATE VALUE '45000' SET message_text = 'You cannot change the grade result,if it had already been finalized.';
+        SIGNAL SQLSTATE VALUE '45000' SET message_text = 'O vathmos den mporei na allaxtei ap th stigmh poy exei oristikopoih8ei.';
     END IF;
 END$
 DELIMITER ;
@@ -578,13 +565,13 @@ DELIMITER ;
 DELIMITER $
 CREATE PROCEDURE SuccessLog(IN table_of_incident ENUM('job','employee','evaluationresult'), IN type_of_incident ENUM('INSERT','UPDATE','DELETE'))
 BEGIN
-    INSERT INTO  Log(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'Yes');
+    INSERT INTO  logs(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'YES');
  
 END$
 
 CREATE PROCEDURE FailureLog(IN table_of_incident ENUM('job','employee','evaluationresult'), IN type_of_incident ENUM('INSERT','UPDATE','DELETE')) 
 BEGIN
-	INSERT INTO Log(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'No');
+	INSERT INTO logs(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'NO');
 END$
 DELIMITER ;
 
@@ -644,7 +631,7 @@ BEGIN
 
 CLOSE EvalCursor;
 SET specific_avg=specific_avg/loops_amount_finalization;
-UPDATE evaluator SET evaluator.average_grade=specific_avg WHERE evaluator.evaluator_username=specific_evaluator_username;
+UPDATE evaluator SET evaluator.avr_grade=specific_avg WHERE evaluator.evaluator_username=specific_evaluator_username;
 END$
 DELIMITER ;
 
@@ -672,7 +659,8 @@ DELIMITER ;
 
 /* D */
 DELIMITER $
-CREATE PROCEDURE FinalizeEvaluations (IN Particular_job_id INT) BEGIN
+CREATE PROCEDURE FinEvaluations (IN Particular_job_id INT) 
+BEGIN
 DECLARE Particular_empl_username VARCHAR(12);
 DECLARE Particular_evaluator_username VARCHAR(12);
 DECLARE Particular_F1 INT(4);
@@ -707,16 +695,17 @@ DELIMITER ;
 /* E */
 DELIMITER $
 CREATE PROCEDURE FinishedEvaluations (in Demanded_job_id int )
- BEGIN
+BEGIN
    DECLARE NumRequests INT(8);
    DECLARE NumUnansweredRequests INT(8);
    Select COUNT(job_id) INTO NumRequests FROM evaluationresult WHERE job_id=Demanded_job_id;
    SELECT COUNT(job_id) INTO NumUnansweredRequests FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NULL;
    
    IF  (NumRequests>0) then               /*Diladi uparxoun request pou exonu ginei ews tora gia na proxorisoume*/
-      IF (NumUnansweredRequests=0) then Select 'All Requests for this job have been fully evaluated.';
+      IF (NumUnansweredRequests=0) then Select 'OLA TA AITHMATA GIA AYTHN TH DOYLEIA EXOYN A3IOLOGH8EI PLHRWS.';
 	  END IF;
-      SELECT empl_username AS 'Candidate',grade FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NOT NULL ORDER BY grade Desc;     /*Dinoume sto username eidiko onoma kai oxi sto grade,giati to grade einai column eidiko
+      SELECT empl_username AS 'Candidate',grade FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NOT NULL ORDER BY grade Desc;     
+      /*Dinoume sto username eidiko onoma kai oxi sto grade,giati to grade einai column eidiko
       gia to table auto eno to empl_username einai genika opou uparxei username ypallilou*/
 	  IF (NumUnansweredRequests>0) THEN SELECT NumUnansweredRequests;
 	  END IF;
@@ -728,7 +717,8 @@ DELIMITER ;
 
 /* ST */
 DELIMITER $
-CREATE PROCEDURE Particular_Employee_Requests (in particular_name varchar(25),in particular_surname varchar(35)) BEGIN
+CREATE PROCEDURE ParticularEmployeeRequests (in particular_name varchar(25),in particular_surname varchar(35))
+BEGIN
     DECLARE particular_job_id INT(8);
     DECLARE particular_grade INT(4);
     DECLARE finished TINYINT(2);
@@ -750,4 +740,4 @@ CREATE PROCEDURE Particular_Employee_Requests (in particular_name varchar(25),in
 	END WHILE;
     CLOSE ReqCursor;
 END$
-DELIMITER ;INSERT INTO has_degree VALUES('Computers','Plhroforikh','afentakh','','MASTER') /* insert into has_degree(titlos,idryma,username_employee,etos,grade,bathmida) values ('Computers','Ceid','afERMAlneUm',2004,7,'MASTER');$  insert into has_degree(titlos,idryma,username_employee,etos,grade,bathmida) values ('Computers','Ceid','ALMYRNiCAJA',2006,8,'MASTER');$  insert into required_knowledge(job_id,title_of_knowledge) values (5,'Psarema')$     insert into required_knowledge(job_id,title_of_knowledge) values (5,'Xaitheuma zontanou psariou')$  insert into knowledge(title_of_knowledge) values ('Psarema);     insert into required_knowledge(title_of_knowledge, knowledge_is_part_of) values ('Xaitheuma zontanou psariou', knowledge_is_part_of)΄΄  */  INSERT INTO employee VALUES('afentakh','143792558',5,'phre me meso th doyleia','ISBL,Seminario prwtwn voh8eiwn',NULL,NULL)
+DELIMITER ;
