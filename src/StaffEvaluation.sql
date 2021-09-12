@@ -735,8 +735,8 @@ BEGIN
 
     FETCH ReqCursor INTO particular_job_id,particular_grade,particular_evaluator_username;
     WHILE (finished=0) DO	
-       SELECT particular_job_id AS 'Job requested from employee.',particular_grade AS 'Grade,IF the request have been evalueated fully';
-       SELECT name,surname AS 'Evaluator of the job' FROM user WHERE particular_evaluator_username=user.username and userkind='EVALUATOR';
+       SELECT particular_job_id AS 'Doyleia poy zhth8hke ap ton ypallhlo.',particular_grade AS 'Vathmos,An to aithma exei a3iologh8ei plhrws.';
+       SELECT name,surname AS 'O a3iologhths ths doyleias' FROM user WHERE particular_evaluator_username=user.username and userkind='EVALUATOR';
        FETCH ReqCursor INTO particular_job_id,particular_grade,particular_evaluator_username;
 	END WHILE;
     CLOSE ReqCursor;
