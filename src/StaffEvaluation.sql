@@ -10,7 +10,7 @@ CREATE TABLE user(
     name VARCHAR(25),
     surname VARCHAR(35),
     email VARCHAR(30),
-    reg_date DATE DEFAULT CURDATE(),   /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */
+    reg_date DATE DEFAULT CURDATE(),
     userkind ENUM('MANAGER','EVALUATOR','EMPLOYEE','ADMINISTRATOR'),
     INDEX UK(userkind),
     PRIMARY KEY (username)
@@ -340,7 +340,6 @@ CREATE TABLE requestevaluation(
     job_id INT(4) NOT NULL,
     SubmissionDate DATE NOT NULL,
     empl_interest BOOL DEFAULT FALSE,
-    reg_date DATE DEFAULT CURDATE(),   /* AYTOMATH XRHSH HMEROMHNIAS EGGRAFHS */
     PRIMARY KEY(empl_username,job_id),
     -- CONSTRAINT const14
     -- FOREIGN KEY(empl_username)
@@ -562,14 +561,10 @@ DELIMITER ;
 DELIMITER $
 CREATE PROCEDURE SendRequestEvaluation(IN req_empl_username VARCHAR(12),IN req_job_id INT(8))
 BEGIN
-DECLARE shmdate DATE;
 DECLARE req_SubmissionDate DATE;
 DECLARE req_evaluator_username VARCHAR(12);
-Set shmdate=curdate() ;
-Select shmdate;
 SELECT SubmissionDate INTO req_SubmissionDate FROM requestevaluation WHERE requestevaluation.empl_username=req_empl_username AND requestevaluation.job_id=req_job_id;
-select req_SubmissionDate;
-IF  (shmdate<=req_SubmissionDate) THEN
+IF  (CURDATE()<=req_SubmissionDate) THEN
     SELECT evaluator_username INTO req_evaluator_username FROM job WHERE job.job_id=req_job_id;
     INSERT INTO evaluationresult(empl_username,job_id,evaluator_username) VALUES (req_empl_username,req_job_id,req_evaluator_username);
 
