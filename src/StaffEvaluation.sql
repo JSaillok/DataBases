@@ -49,6 +49,7 @@ CREATE TABLE company(
 );
 
 /* ERWTHMA 4b */
+
 DELIMITER $
 CREATE TRIGGER UnchangeableColumns
 BEFORE UPDATE ON company
@@ -478,22 +479,6 @@ CREATE TABLE logs(
     -- ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-/* SUCCESS / FAILURE LOG */
-DELIMITER $
-CREATE PROCEDURE SuccessLog(IN table_of_incident ENUM('job','employee','evaluationresult'), IN type_of_incident ENUM('INSERT','UPDATE','DELETE'))
-BEGIN
-    INSERT INTO  logs(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'YES');
- 
-END$
-
-CREATE PROCEDURE FailureLog(IN table_of_incident ENUM('job','employee','evaluationresult'), IN type_of_incident ENUM('INSERT','UPDATE','DELETE')) 
-BEGIN
-	INSERT INTO logs(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'NO');
-END$
-DELIMITER ;
-
-
-
 
 SET @current_username='';
 SET @current_userkind='';
@@ -602,7 +587,7 @@ WHILE (finished=true) DO
         SELECT Particular_grade;
         UPDATE evaluationresult 
         SET grade=Particular_grade WHERE empl_username=Particular_empl_username AND job_id=Particular_job_id;
-        SELECT Particular_evaluator_username AS 'EMPLOYEE', Particular_grade as 'grade'; 
+        SELECT Particular_evaluator_username AS 'EVALUATOR', Particular_grade as 'grade'; 
     END IF;
 
     FETCH FinCursor INTO Particular_empl_username,Particular_evaluator_username,Particular_F1,Particular_F2,Particular_F3,Particular_grade;
@@ -621,7 +606,7 @@ BEGIN
    Select COUNT(job_id) INTO NumRequests FROM evaluationresult WHERE job_id=Demanded_job_id;
    SELECT COUNT(job_id) INTO NumUnansweredRequests FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NULL;
    
-   IF  (NumRequests>0) then               /*Diladi uparxoun request pou exonu ginei ews tora gia na proxorisoume*/
+   IF  (NumRequests>0) then               /*Diladi uparxoun request pou exoun ginei ews tora gia na proxorisoume*/
       IF (NumUnansweredRequests=0) then Select 'OLA TA AITHMATA GIA AYTHN TH DOYLEIA EXOYN A3IOLOGH8EI PLHRWS.';
 	  END IF;
       SELECT empl_username AS 'Candidate',grade FROM evaluationresult WHERE job_id=Demanded_job_id AND grade IS NOT NULL ORDER BY grade Desc;     
@@ -661,6 +646,22 @@ BEGIN
     CLOSE ReqCursor;
 END$
 DELIMITER ;
+
+
+/* SUCCESS / FAILURE LOG */
+DELIMITER $
+CREATE PROCEDURE SuccessLog(IN table_of_incident ENUM('job','employee','evaluationresult'), IN type_of_incident ENUM('INSERT','UPDATE','DELETE'))
+BEGIN
+    INSERT INTO  logs(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'YES');
+ 
+END$
+
+CREATE PROCEDURE FailureLog(IN table_of_incident ENUM('job','employee','evaluationresult'), IN type_of_incident ENUM('INSERT','UPDATE','DELETE')) 
+BEGIN
+	INSERT INTO logs(userkind,table_of_incident,username,time_of_incident,type_of_incident,success) VALUES (@current_userkind,table_of_incident,@current_username,now(),type_of_incident,'NO');
+END$
+DELIMITER ;
+
 
 INSERT INTO company(AFM,DOY,compname,phone,street,num,city,country) VALUES('143792558','NAYFPLIO','SaillokStudio','2752017613','Omiroy','26','Nafplio','Greece');
 INSERT INTO company(AFM,DOY,compname,phone,street,num,city,country) VALUES('268926487','AMAROYSIOY','Oikomat','2103558645','Eyripidi','1','A8hna','Greece');
